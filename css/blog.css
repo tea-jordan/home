@@ -1,0 +1,78 @@
+body{
+    background-color:#EDE6DB;
+    font-family:"Montserrat";
+}
+
+h5{
+    font-size:1.1rem;
+    font-weight:700;
+    padding-bottom:0.5rem;
+}
+
+/* Navbar Section */
+#nav-section{
+    background-color: #002B5B;
+}
+
+.navbar-brand{
+    font-family: "Ubuntu";
+    font-size:2.5rem;
+    font-weight:700;
+}
+
+.navbar-brand:hover{
+    color:#EDE6DB;
+}
+
+.nav-item{
+padding:0 18px;
+}
+
+.nav-link{
+    font-weight:lighter;
+    font-size:1.2rem;
+}
+
+.container-fluid{
+    padding: 3% 10% 3%;
+}
+
+/* Post Section */
+.post{
+    padding: 3% 10% 3%;
+}
+
+pre{
+    background-color: #002B5B;
+    color:#fff;
+    border: 2px solid #D8D8D8; 
+    border-radius:15px;
+}
+
+.keyword{
+    color:#ea750f
+}
+
+.num{
+    color:#d25d5d
+}
+
+.char{
+    color:#52ce39
+}
+
+.specchar{
+    color:#82C3EC
+}
+
+.comment{
+    color:#D8AED3
+}
+
+.contact-button{
+        border-color:#002B5B
+}
+
+.contact-button:hover{
+    background-color: #002B5B;
+}

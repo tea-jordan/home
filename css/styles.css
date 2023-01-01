@@ -1,0 +1,157 @@
+body{
+    font-family:"Montserrat";
+}
+
+h1{ 
+    font-size:3rem;
+}
+
+/* Navbar Section */
+.navbar{
+    padding:0 0 4.5rem;
+}
+
+.navbar-brand{
+    font-family: "Ubuntu";
+    font-size:2.5rem;
+    font-weight:700;
+}
+
+.navbar-brand:hover{
+    color:#EDE6DB;
+}
+
+.nav-item{
+padding:0 18px;
+}
+
+.nav-link{
+    font-weight:lighter;
+    font-size:1.2rem;
+}
+
+/* Title Section */
+.container-fluid{
+    padding: 3% 10% 7%;
+}
+
+#title{
+    background-color:#002B5B;
+    text-align:center;
+    color:#EDE6DB;
+}
+
+#title-image{
+    width: 100%;
+    border-radius: 20%;
+}
+
+#title-text{
+    text-align: left;
+    line-height:1.5;
+    font-weight:700;
+    padding-top:22%;
+}
+
+/* Blog Section */
+#blog{
+    background-color:#EDE6DB;
+    text-align:center;
+    padding:2% 0%;
+}
+
+.blog-bucket{
+    padding-top:5%;
+    padding-bottom:5%;
+}
+
+.blog-bundle{
+    padding:5% 5%;
+}
+
+.blog-button{
+    border-color:#002B5B
+}
+
+.blog-button:hover{
+    background-color: #002B5B;
+}
+
+.feature-text{
+    color:#002B5B;
+    font-weight:bold;
+    font-size: 1.25rem;
+}
+
+.feature-desc{
+    color:#2B4865;
+}
+
+.feature-img{
+    color: #2B4865;
+    padding-bottom:1rem;
+}
+
+.feature-img:hover{
+    color:#002B5B;
+}
+
+/* About Me Section */
+#about-me{
+    background-color: #002B5B;
+    text-align: center;
+    color:#EDE6DB;
+    padding: 5% 5%;
+}
+
+#profile-pic{
+    width:15%;
+    padding-bottom:2rem;
+}
+
+#about-me p {
+    font-family:"Montserrat";
+    font-size:1.25rem;
+}
+
+.bio-text{
+    padding-bottom:1rem;
+}
+
+.resume-button{
+    outline-color:#EDE6DB;
+    color:#EDE6DB;
+    border-color:#EDE6DB;
+}
+
+.resume-button:hover{
+    background-color: #EDE6DB;
+}
+
+/* Contact Section */
+#contact{
+    background-color: #EDE6DB;
+    text-align: center;
+    padding:3% 3%;
+}
+
+.footer-icons{
+    margin:3% 1%;
+    color:#002B5B;
+}
+
+.footer-icons:hover{
+    color:#5584AC;
+}
+
+.footer-para{
+    color:#2B4865;
+}
+
+@media (max-width:1075px){
+    #title-text{
+        font-size:2rem;
+        text-align: center;
+        padding-top:0;
+    }
+}

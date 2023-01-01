@@ -1,0 +1,52 @@
+body{
+    background-color:#EDE6DB;
+}
+
+/* Navbar Section */
+#nav-section{
+    background-color: #002B5B;
+}
+
+.navbar-brand{
+    font-family: "Ubuntu";
+    font-size:2.5rem;
+    font-weight:700;
+}
+
+.navbar-brand:hover{
+    color:#EDE6DB;
+}
+
+.nav-item{
+padding:0 18px;
+}
+
+.nav-link{
+    font-weight:lighter;
+    font-size:1.2rem;
+}
+
+.container-fluid{
+    padding: 3% 10% 3%;
+}
+
+/* Post Section */
+.post{
+    padding: 3% 10% 0;
+    font-family: "Montserrat";
+}
+
+.post h1{
+    font-weight:700;
+    font-size:3.5rem;
+    text-align: center;
+}
+
+.liu-bao-img{
+    width:100%;
+    border-radius: 30px;
+}
+
+.col-lg-6{
+    padding:3% 3%;
+}

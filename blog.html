@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>T-Jordan</title>
+    <link rel = "icon" href = "favicon.ico">
+    
+    <!-- Javascript for Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700;900&family=Ubuntu:wght@300;400;700&display=swap" rel="stylesheet">
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="css/blog.css">
+
+</head>
+<body>
+  <div class = "container-fluid" id = "nav-section">
+    <!-- Nav Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+      <a class="navbar-brand" href="index.html">t-jordan</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="index.html#blog">Blog</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="index.html#about-me">About Me</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="index.html#contact">Contact</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </div>
+
+  <div class = "post">
+    <h1>Business Reporting Applications of R Programming</h1>
+    <br>
+    <p>Since one of my professors in my MBA program, Dr. Yonggang (Tim) Lu, introduced me to R programming, 
+      I have come to appreciate it in my job as a data analyst.  The capabilities of R have helped simplify 
+      the process of understanding large datasets and generating reports for end users. Below I will outline a couple of 
+      different use-cases with example code showing how R scripting can aid the process of wrangling and reporting 
+      information. 
+    </p>
+    <br>
+    <hr>
+    <br>
+    <h5>Libraries</h5>
+    <p>Part of what makes using R so helpful are the well-developed libraries for different data science functions. These include 
+      the tidyverse library (with packages like dplyr for data manipulation and ggplot2 for data visualization), readxl for 
+      importing data from excel & csv formats, and openxlsx which is useful for creating excel output files from R objects. Many 
+      of the use-cases shared below rely on these packages, and the code will assume that the libraries are 
+      loaded in your environment. 
+    </p>
+    <pre><code>
+      <span class = "keyword">library</span><span class ="specchar">(</span>tidyverse<span class = "specchar">)</span>
+      <span class = "keyword">library</span><span class ="specchar">(</span>readxl<span class = "specchar">)</span>
+      <span class = "keyword">library</span><span class ="specchar">(</span>openxlsx<span class = "specchar">)</span>
+    </code></pre>
+    <br>
+    <hr>
+    <br>
+    <h5>Loading Initial Datasets into R</h5>
+    <p>
+      Our company's system has many different data fields, and our managers track KPIs through fields flagged as "required". These 
+      required data fields are considered important to operations and are evaluated for accuracy. For each reporting period our 
+      system automatically generates a report with each file and data field value. This report regularly 
+      includes more than 10,000 records of more than 50 unique variables (required fields). It would be too time consuming to review
+      this much data manually, so thankfully R offers a better way. 
+    </p>
+    <br>
+    <p>To start the .csv or .xlsx file from our system's report can be read into a data frame in R using the readxl package.
+      Ideally our data is in table format of some kind, with rows as the observations and columns as the variables. If the format
+      of the starting document is not in perfect table format, we can write cleanup steps in our script after loading to make the data 
+      fit into a proper table/dataframe format.
+    </p>
+    <pre><code>
+      df <span class = "specchar">=</span> read_xlsx<span class = "specchar">(</span><span class = "char">"C:/Users/my-user-id/Desktop/folder/file-name.xlsx"</span><span class = "specchar">)</span>
+    </code></pre>
+    <br>
+    <p>
+      Or depending on your reporting timeframe, multiple versions of the same file can be read at once using a loop. In my case the system runs 
+      reports monthly which I aggregate into a quarterly report. For this reason, using a loop to read all three files and 
+      then merge them into one combined data frame helps save time. (To save space, some example cleanup tasks such as removing empty columns
+      have been written into the loop as well):
+    </p>
+    <pre><code>
+      filenames <span class = "specchar">=</span> c<span class = "specchar">(</span><span class = "char">"file1"</span>, <span class = "char">"file2"</span>, <span class = "char">"file3"</span><span class = "specchar">)</span>
+          
+      output_list <span class = "specchar">=</span> list<span class = "specchar">(</span><span class = "specchar">)</span>
+
+      <span class = "keyword">for</span> <span class = "specchar">(</span> i <span class = "keyword">in</span> filenames<span class = "specchar">) {</span>
+  
+        <span class = "comment"># read file and save it as a dataframe in the output list</span>
+        output_list<span class = "specchar">[[</span>i<span class = "specchar">]]</span> <span class = "specchar">=</span> read_xlsx<span class = "specchar">(</span>paste<span class = "specchar">(</span><span class = "char">"C:/Users/my-user-id/Desktop/folder/"</span>, i, <span class = "char">".xlsx"</span>, sep <span class = "specchar">=</span> <span class = "char">""</span><span class = "specchar">))</span>
+            
+        <span class = "comment"># cleanup & removing duplicate rows of dataframes in output list </span>
+        empty_cols <span class = "specchar">=</span> sapply<span class = "specchar">(</span>output_list<span class = "specchar">[[</span>i<span class = "specchar">]]</span>, function<span class = "specchar">(</span>x<span class = "specchar">)</span> all<span class = "specchar">(</span>is.na<span class = "specchar">(</span>x<span class = "specchar">)))</span>
+        output_list<span class = "specchar">[[</span>i<span class = "specchar">]]</span> <span class = "specchar">=</span> output_list<span class = "specchar">[[</span>i<span class = "specchar">]]</span><span class = "specchar">[</span>,<span class = "specchar">!</span>empty_cols<span class = "specchar">]</span>
+        output_list<span class = "specchar">[[</span>i<span class = "specchar">]]</span> <span class = "specchar">=</span> output_list<span class = "specchar">[[</span>i<span class = "specchar">]]</span> <span class = "specchar">%>%</span> distinct<span class = "specchar">()</span>
+        rm<span class = "specchar">(</span>i, empty_cols<span class = "specchar">)</span>
+            
+      <span class = "specchar">}</span>
+          
+      <span class = "comment"># Using the rowbind function to combine all three dataframes into one</span>
+      combined_df <span class = "specchar">=</span> rbind<span class = "specchar">(</span>output_list<span class = "specchar">[[</span><span class = "char">"file1"</span><span class = "specchar">]]</span>, output_list<span class = "specchar">[[</span><span class = "char">"file2"</span><span class = "specchar">]]</span>, output_list<span class = "specchar">[[</span><span class = "char">"file3"</span><span class = "specchar">]])</span>
+    </code></pre>
+    <br>
+    <p>
+      Now that we have the monthly files combined into one quarterly data frame, we can write expressions to convert 
+      data into appropriate types, validate the data based on rules, or create calculated fields for our final report that 
+      are not available in the base report. 
+    </p>
+    <br>
+    <hr>
+    <br>
+    <h5>Checking Data Types from Excel or CSV Sources</h5>
+    <p>After loading data into R, it is a good idea to check the data types prior to calculating new fields or preparing the 
+      report for end users. Excel or CSV files tend to do strange things with data types. For example, numbers may be stored as 
+      text rather than a true numeric, which we may or may not want. Sometimes having numbers stored as text is important (if we
+      have unique ID numbers that could start with '0', then storing them as true numerics would lose the first digit of the ID #).
+      Other times, if we want to perform calculations with numbers it is important they are stored as true numerics. To check 
+      the data type of an imaginary column 'x' in our dataframe 'df', we can use the simple expression:
+    </p>
+    <pre><code>
+      class<span class = "specchar">(</span>df<span class = "specchar">$</span>x<span class = "specchar">)</span>
+    </code></pre>
+    <br>
+    <p>
+      This will log the data type of column x to the console. In R some of the basic data types include character (text), 
+      numeric (numbers with decimal values), integer (whole numbers), logical (TRUE/FALSE), and POSIXct - a specific format for dates. If we see a data type that is 
+      incorrect, it is possible to force coercion of data types in R. For imaginary columns 'a', 'b', and 'c' in our dataframe, 
+      if we wanted to convert their data types to numeric, character, and logical, respectively, we could write:
+    </p>
+    <pre><code>
+      df<span class = "specchar">$</span>a <span class = "specchar">=</span> as.numeric<span class = "specchar">(</span>df<span class = "specchar">$</span>a<span class = "specchar">)</span>
+      df<span class = "specchar">$</span>b <span class = "specchar">=</span> as.character<span class = "specchar">(</span>df<span class = "specchar">$</span>b<span class = "specchar">)</span>
+      df<span class = "specchar">$</span>c <span class = "specchar">=</span> as.logical<span class = "specchar">(</span>df<span class = "specchar">$</span>c<span class = "specchar">)</span>
+    </code></pre>
+    <br>
+    <p>
+      It is good to be careful while doing this, because sometimes 
+      we can lose information if values are coerced incorrectly. In the example above: if we had character text showing ID numbers 
+      and converted these to numeric, any ID #s starting with '0' could lose their first digit. Sometimes you will see R throw the 
+      error "NAs introduced by coercion". This means that some data values were lost in the chang and set to 'NA', because 
+      R did not know how to handle the coercion. One common reason that causes this when converting numbers stored as text to true 
+      numbers is if the numbers in Excel or CSV are written with commas: ($1,200.00) won't be converted to (1200) using as.numeric 
+      due to the '$' and ',' values stored as text. When this happens we want to double check the values in the original data set and 
+      make adjustments as needed to our script before proceeding. 
+    </p>
+    <br>
+    <hr>
+    <br>
+    <h5>Subsetting Datasets Based on Certain Values</h5>
+    <p>
+      In some reviews we want to look at the dataset as a whole, but it can also be useful to subset the dataset based on 
+      certain values. R makes subsetting dataframes easy using square bracket notation: df[ , ]. In this notation, anything
+      on the left-side of the comma refers to rows, and anything on the right side refers to columns. In this way the subset
+      df[1 , ] would return the entire first row of our dataframe, and the subset df[ , 2] would return the entire second column (R-indexing 
+      starts on 1, not 0!).
+    </p>
+    <br>
+    <p>
+      Luckily subsetting does not need to use just index numbers. We can subset using different operators to retrieve certain parts of
+      the dataset that are of interest to us. Some useful operators in R include:
+    </p>
+    <ul>
+      <li><strong> == </strong> - is equal to, <em>two equals signs are used because the single = is used for assignment of objects in R</em></li>
+      <li><strong> != </strong> - not equal to</li> 
+      <li><strong> < </strong> - less than</li>
+      <li><strong> <= </strong> - less than or equal to</li>
+      <li><strong> > </strong> - greater than</li>
+      <li><strong> >= </strong> - greater than or equal to</li>
+      <li><strong> a & b </strong> - a and b</li>
+       <li><strong> a | b </strong> - a or b</li>
+      <li><strong> a %like% "xyz" </strong> - pattern matching, tests if "a" includes the pattern "xyz" somewhere, this is useful for text data</li>
+      <li><strong> a %in% some-sequence </strong> - determines whether "a" is in some sequence of objects. useful for subsetting large datasets by a list of pre-defined values for certain variables</li>
+    </ul>
+    <br>
+    <p>
+      For a simple example, if we wanted to check our dataset to see which records had incomplete values for the variable "Name", we
+      could write:
+    </p>
+    <pre><code>
+      df<span class = "specchar">[</span>df<span class = "specchar">$</span>Name <span class = "specchar">%like%</span> <span class = "char">"unknown"</span> <span class = "specchar">|</span> df<span class = "specchar">$</span>Name <span class = "specchar">%like%</span> <span class = "char">"John Doe"</span>, <span class = "specchar">]</span>
+    </code></pre>
+    <p>
+      This will return all rows in the dataframe where the conditions "Column 'Name' is like 'unknown'" or "Column 'Name' is like 'John Doe'" are true.
+      With the number of operators available, there is always a way to find whichever subset you are looking for.
+    </p>
+    <br>
+    <hr>
+    <br>
+    <h5>Creating Calculated Fields</h5>
+    <p>
+      Once we have our data in the desired format in R, we may want to create some new fields based on existing variables in the 
+      dataset. Creating calculating fields can help us learn more information about our topic of interest. Adding calculated fields is 
+      very easy in R because R can take columns of a dataframe as inputs, perform operations 
+      element wise down columns, and generate a new column as an output. For example, say we have a health dataset with variables 
+      height and weight, among others. If we wanted to add a calculated field for BMI, we can write the following:
+    </p>
+    <pre><code>
+      df<span class = "specchar">$</span>BMI <span class = "specchar">=</span> <span class = "specchar">(</span>df<span class = "specchar">$</span>weight <span class = "specchar">/</span> <span class = "specchar">(</span>df<span class = "specchar">$</span>height<span class = "specchar">**</span><span class = "num">2</span><span class = "specchar">))</span>
+    </code></pre>
+    <br>
+    <p>
+      This expression will add on a new column "BMI" to our dataframe, with a calculated BMI based off of the "health" and "weight"
+      columns for each record in the dataset.
+    </p>
+    <br>
+    <p>
+      We can also use existing variables in our R environment combined with logical expressions to create more complex calculated 
+      fields. Managers at my company track different KPIs by users for performance management purposes. In one example, we receive 
+      a report of actions taken per month for each user. However, the KPI and associated goal state that each user in the department 
+      should take at least one action per day. To turn the monthly actions into a more meaningful figure we can do the following. 
+    </p>
+    <br>
+    <p>
+      First, we will create a new variable for the number of working days in the month <em>(using bizdays package which lets you calculate 
+      business days in given timeframes)</em> For this example the month reviewed will be January:
+    </p>
+    <pre><code>
+      janWorkdays <span class = "specchar">=</span> bizdays<span class = "specchar">(</span><span class = "char">"2022-01-01"</span>, <span class = "char">"2022-02-01"</span>, <span class = "char">"weekends"</span><span class = "specchar">)</span>
+    </code></pre>
+    <br>
+    <p>
+      In this example we plan on dividing the monthly actions for January by the number of workdays in January to calculate the actions 
+      per day for each user. However, if an employee was hired sometime in January, they may not have worked for every working day in the month, 
+      and this calculation could unfairly lower their KPI result for the month. To work around this, we will create a new calculated 
+      field using the users date of hire (DOH), and adding this new calculated field to the dataset:
+    </p>
+    <pre><code>
+      df<span class = "specchar">$</span>daysFromDOH <span class = "specchar">=</span> bizdays<span class = "specchar">(</span>df<span class = "specchar">$</span>DOH, <span class = "char">"2022-02-01"</span>, <span class = "char">"weekends"</span><span class = "specchar">)</span>
+    </code></pre>
+    <br>
+    <p>
+      Next, we will create a new column of our dataframe with the dummy value of 0 to hold space for our final calculated field.
+    </p>
+    <pre><code>
+      df<span class = "specchar">$</span>janActionsPerDay <span class = "specchar">=</span> <span class = "num">0</span>
+    </code></pre>
+    <br>
+    <p>
+      Finally, we can write a loop with logical tests to update the janActionsPerDay field based on the appropriate calculation 
+      for a user's date of hire:
+    </p>
+    <pre><code>
+      <span class = "keyword">for</span> <span class = "specchar">(</span>i <span class = "keyword">in</span> <span class = "num">1</span><span class = "specchar">:</span>length<span class = "specchar">(</span>df<span class = "specchar">$</span>user<span class = "specchar">)) {</span>
+          
+          <span class = "keyword">if</span> <span class = "specchar">(</span> df<span class = "specchar">[</span>i, <span class = "char">"daysFromDOH"</span><span class = "specchar">] <</span> janWorkdays<span class = "specchar">) {</span>
+              
+              df<span class = "specchar">[</span>i, <span class = "char">"janActionsPerDay"</span><span class = "specchar">] =</span> round<span class = "specchar">((</span>df<span class = "specchar">[</span>i, <span class = "char">"janActions"</span><span class = "specchar">] /</span> df<span class = "specchar">[</span>i, <span class = "char">"daysFromDOH"</span><span class = "specchar">])</span>, <span class = "num">4</span><span class = "specchar">)</span>
+          
+          <span class = "specchar">}</span> <span class = "keyword">else </span><span class = "specchar">{</span>
+              
+              df<span class = "specchar">[</span>i, <span class = "char">"janActionsPerDay"</span><span class = "specchar">] =</span> round<span class = "specchar">((</span>df<span class = "specchar">[</span>i, <span class = "char">"janActions"</span><span class = "specchar">] /</span> janWorkdays<span class = "specchar">)</span>, <span class = "num">4</span><span class = "specchar">)</span>   
+          
+          <span class = "specchar">}</span>
+      
+      <span class = "specchar">}</span>  
+    </code></pre>
+    <br>
+    <p>With this loop our calculated field will be more accurate based on the logical test used in the loop, which will make
+      KPI testing easier for end users. 
+    </p>
+    <br>
+    <hr>
+    <br>
+    <h5>Creating Sub-Reports with Looping for Multiple End-Users</h5>
+    <p>Another way R can help with business reporting is with generating individual reports for end users based on a subset of a 
+      larger data frame. At my company our department gets data for all users that needs to be reported out to team managers. There are 
+      roughly 20 teams, which makes it time consuming using excel, pivot tables, etc. to filter and share data. Luckily, 
+      using for loops R can solve this problem quickly. First we will create a character vector with the names of our team managers,
+      and then will use a loop to subset the full dataset into individual dataframes by team:
+    </p>
+    <pre><code>
+      teamManagers <span class = "specchar">=</span> c<span class = "specchar">(</span><span class = "char">"John Doe"</span>, <span class = "char">"Jane Doe"</span>, <span class = "char">"D. Vader"</span>, etc..., <span class = "char">"P. Leia"</span><span class = "specchar">)</span>
+      output_list <span class = "specchar">=</span> list<span class = "specchar">(</span><span class = "specchar">)</span>
+
+      <span class = "keyword">for</span> <span class = "specchar">(</span>i <span class = "keyword">in</span> teamManagers<span class = "specchar">) {</span>
+            
+            output_list<span class = "specchar">[[</span>i<span class = "specchar">]] = </span>df<span class = "specchar">[</span>df<span class = "specchar">$</span>Manager <span class = "specchar">==</span> i, <span class = "specchar">]</span>
+      
+      <span class = "specchar">}</span>
+    </code></pre>
+    <br>
+    <p>Once each team's individual table is saved as its own item in the output list, we can do any number of functions on the
+      individual team data, and then use the openxlsx package to save output excel files back to our computer for each individual
+      manager.    
+    </p>
+    <pre><code>
+      <span class = "keyword">for</span> <span class = "specchar">(</span>i <span class = "keyword">in</span> teamManagers<span class = "specchar">) {</span>
+            
+            write.xlsx<span class = "specchar">(</span>x<span class = "specchar"> =</span> </span>output_list<span class = "specchar">[[</span>i<span class = "specchar">]]</span>, file <span class = "specchar">=</span> paste<span class = "specchar">(</span><span class = "char">"C:/Users/my-user-id/Desktop/folder/"</span>, i, <span class = "char">".xlsx"</span><span class = "specchar">)</span>
+      
+      <span class = "specchar">}</span>
+    </code></pre>
+    <br>
+    <p>
+      This will create individual workbooks with the subset data that can be sent out to each team manager. With the same logic and use
+      of loops, you can do many different thing such as create data visualizations for specific teams, calculate summary statistics, etc.
+      With these kinds of operations I like to create a folder within my directory named "Excel_Outputs", or "PNG_Outputs" for data visualizations
+      and save output files to these sub-folders so that the main working directory does not get disorganized with too many files. 
+    </p>
+    <br>
+    <hr>
+    <br>
+    <h5>Final Thoughts</h5>
+    <p>
+      I am newer to programming with R, but have found it helpful for many different aspects of working with data. If you have
+      any thoughts please feel free to reach out, I'd love to learn about how you use R!
+    </p>
+    <a href = "index.html#contact"><button type="button" class="btn btn-outline-dark contact-button">Contact Me</button></a>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,70 @@
+body{
+    text-align: center;
+    font-family: "Open Sans";
+    background-color: #040303;
+}
+
+a{
+    color:#A13333;
+}
+
+a:hover{
+    color:#ECDBBA;
+}
+
+h1{
+    font-family: "Ubuntu";
+    font-weight: 700;
+    font-size: 4rem;
+    color:#A13333;
+    text-shadow:#ECDBBA 3px 0;
+    padding: 2% 0;
+}
+
+img{
+    position:relative;
+    width:100%;
+    border-radius:10%;
+}
+
+footer{
+    color:#A13333;
+    padding: 2% 0;
+}
+
+.container-fluid{
+    background-color: #A13333;
+    padding:3% 3%;
+}
+
+.crts-btn{
+    font-size:1.25rem;
+    margin:1% 2%;
+    width:33%;
+    color:#A13333;
+    background-color:#ECDBBA;
+    font-weight:600;
+}
+
+.clicked{
+    box-shadow: 0 2px 2px 0 #A13333;
+    opacity: 0.5;
+}
+
+@media (max-width:1075px){
+    .crts-btn{
+        font-size:0.85rem;
+    }
+
+    h1{
+        font-size: 3rem;
+    }
+
+    img{
+        width:75%
+    }
+
+    .bucket4btn{
+        padding-top:2%;
+    }
+}
