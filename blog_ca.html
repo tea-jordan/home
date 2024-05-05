@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>T-Jordan</title>
+    <link rel = "icon" href = "favicon.ico">
+    
+    <!-- Javascript for Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700;900&family=Ubuntu:wght@300;400;700&display=swap" rel="stylesheet">
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="css/blog.css">
+
+</head>
+<body>
+  <div class = "container-fluid" id = "nav-section">
+    <!-- Nav Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+      <a class="navbar-brand" href="index.html">t-jordan</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="index.html#blog">Blog</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="index.html#about-me">About Me</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="index.html#contact">Contact</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </div>
+
+  <div class = "post">
+    <h1>Creating a Cellular Automata Animator in Java</h1>
+    <br>
+    <p>While studying Java and object-oriented design, my teacher shared an interesting topic with me called 
+        Cellular Automata (CA). These are systems made up by a collection of elements, or cells. Each cell can 
+        exist in a set number of states <b>({0, 1}, {off, on}, etc)</b>. With an initial state created, all of the cells 
+        in a CA will then change over time based on simple rules, which use the states of a cell's neighbors 
+        as inputs. Systems that could grow and change themselves based on simple rules interested me, and some of
+        the patterns these systems could create were very neat. For this reason I decided to create a program in 
+        Java that could animate the changes of CA systems. There were two main systems I animated: the first is 
+        based on <a href = "https://www.wolframscience.com/">Stephen Wolfram's CA rules</a>. The second 
+        is based on a paper that was published in Scientific American in the 70's by the mathematician John Conway. 
+        <a href = "https://www.ibiblio.org/lifepatterns/october1970.html">Conway's Game of Life</a> is a game 
+        that uses a 2-D CA to show how cells in a table change over time. 
+    </p>
+    <br>
+    <hr>
+    <br>
+    <h5>1-D Cellular Automata Rules</h5>
+    <p>The simplest form of a CA we can make is 1-D, where cells are stored in an array. For the CA to change over 
+        time, cells need to change based on the states of their neighbors. The simplest neighborhood we can define 
+        for any cell in this array is of length 3, which includes: <b>{a cell's left neighbor, the cell itself, and a
+        cell's right neighbor}</b>. Because each neighborhood is of length 3, and each cell in a neighborhood can 
+        have the state 0 or 1, this means that for any given neighborhood, there are 2^3 = 8 possible configurations of 
+        states <b>(e.g., {0, 0, 0}, {0, 0, 1}, {0, 1, 1}, etc...)</b>. 
+    </p>
+    <br>
+    <p>For this reason, to change the CA over time, we need to specify what to do if any one of these 8 configurations occurs. 
+        This can be done by converting the state's binary representation to an integer. For example, {0, 0, 0} 
+        converts to 0, {0, 0, 1} to 1, ... up to {1, 1, 1} to 7. Because the states will always convert to an 
+        integer between 0 - 7 (inclusive), we can make the rule an array of length 8 (indexed at 0), and then use 
+        the neighborhood's configuration to get an index for the cells next change. For example 
+        {0, 0, 0, 0, 0, 0, 0, 0} would turn every cell in the next generation to a 0, because any index returns the 
+        value 0, and {1, 1, 1, 1, 1, 1, 1, 1} would make any configuration result in a 1. Interestingly, even for 
+        this simple configuration of neighborhoods of 3, because the rule array itself is of length 8, there are 
+        2^8 = 256 possible rules for changing the CA! For my project, I let the user input a rule as an integer 
+        between 0 - 255, which is then converted to binary to create the rule array. 
+    </p>
+    <br>
+    <p>Displaying how the CA rules can change over time is done in the following way. First, we create a starting 
+        state where every cell is 0, except for one cell in the middle of the array that is 1. We display this row to 
+        the screen, giving every 0 cell a certain color, and every 1 cell a different color. Then, we loop over 
+        all cells and calculate what the state in the next iteration should be based on the current rule. Then, the 
+        prior display is shifted up by a pixel's height, and the new state is displayed below it. This process repeats 
+        until we're bored. Below are some examples of cool patterns that can be generated by different rules:
+    </p>
+    <pre><!-- <code>-->
+        <img class = "tester_CA" src = "images/simple_ca_examples.PNG" alt = "various-ca-patterns">
+    </pre> <!-- </code>-->
+    <br>
+    <hr>
+    <br>
+    <h5>2-D Game of Life</h5>
+    <p>
+      For the 2-D CA, we handle the rules a bit differently. For any cell in a 2-D matrix, the neighborhood includes 
+      the 3x3 grid around the cell, with the cell at its center. If a neighborhood of 3 resulted in 8 combinations 
+      and 256 possible rules, you can imagine how many combinations / rules would result from a neighborhood of 9 
+      cells. For this reason, Conway's game uses simpler rules. The number of active neighbors in a neighborhood are 
+      counted, and then different choices can be made for the next state: <i>(e.g., if only 1 cell is alive, it is too 
+      lonely and will die, if exactly 3 cells are alive, then give birth to a new cell, if >= 6 are alive, a cell may 
+      die from being too croweded, else do nothing)</i>. To start the game of life, we create a 2-D matrix of 
+      numbers, and use a random number generator to set them to 0 or 1:
+    </p>
+    <pre><!-- <code>-->
+        <img class = "blank_GOL" src = "images/random_table.PNG" alt = "randomized-gol-table">
+    </pre> <!-- </code>-->
+    <br>
+    <p>Then, we can loop over every cell, calculate the next state for its neighborhood of 9, and update that to
+        the next state. Once all cells are calculated, the changed state can be updated to the display. Here's an 
+        example of what the game board looks like after running for a couple of seconds. <i>(Note: purple indicates 
+        the death of a cell, and orange indicates the birth of a new cell)</i>.
+    </p>
+    <pre><!-- <code>-->
+        <img class = "active_GOL" src = "images/moving_game.PNG" alt = "playing-gol-table">
+    </pre> <!-- </code>-->
+
+    <br>
+    <hr>
+    <br>
+    <h5>Final Thoughts</h5>
+    <p>
+      This was a fun project to get more fluent with Java and object-oriented design. I find the patterns that 
+      can be created very interesting, and want to work on more computer generated art projects. For any who are 
+      interested in the topic, Thomas Lin Pederson has created <a href = "https://thomaslinpedersen.art/work/">some cool artwork</a> 
+      using the R language.  
+    </p>
+    <br>
+    <p>For any who want to see more of the code, this was designed using the Model, View, Controller (MVC) 
+        pattern, which made separating the data and GUI display elements much easier. 
+        <a href = "https://github.com/tea-jordan/cellular-automata-animator">The full 
+            project can be found on my GitHub</a>. 
+    </p>
+    <br>
+    <a href = "index.html#contact"><button type="button" class="btn btn-outline-dark contact-button">Contact Me</button></a>
+  </div>
+
+</body>
+</html>
